@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <!---I WROTE THIS CODE--->
+<h1>EndPoints</h1>
+<li >GET  http://127.0.0.1:8080/api/users - returns all the registered users and their details <br>
+    <span style="margin-left: 2vw;"> <a href="../api/users">http://127.0.0.1:8080/api/users</a></span>
+</li>
+<br>
+<li >GET  http://127.0.0.1:8080/api/appUserDetail/[APPUSER ID] - return the appuser details and all we know about it <br>
+    <span style="margin-left: 2vw;"> <a href="../api/appUserDetail/{{appuser.id}}">http://127.0.0.1:8080/api/appUserDetail/{{appuser.id}}</a></span>
+</li>
+<br>
+<li >GET  http://127.0.0.1:8080/api/userPostList/[APPUSER ID] - returns all the posts of the user <br>
+    <span style="margin-left: 2vw;"> <a href="../api/userPostList/{{appuser.id}}">http://127.0.0.1:8080/api/userPostList/{{appuser.id}}</a></span>
+</li>
+<br>
+<li >GET  http://127.0.0.1:8080/api/userFriendList/[APPUSER ID] - return a list of all friends/followings and their details of the user <br>
+    <span style="margin-left: 2vw;"> <a href="../api/userFriendList/{{appuser.id}}">http://127.0.0.1:8080/api/userFriendList/{{appuser.id}}</a></span>
+</li>
+<br>
+<li >GET  http://127.0.0.1:8080/api/userStatus/[APPUSER ID] - return the status details of the user <br>
+    <span style="margin-left: 2vw;"> <a href="../api/userStatus/{{appuser.id}}">http://127.0.0.1:8080/api/userStatus/{{appuser.id}}</a></span>
+</li>
+<br>
+
+
+
+
+
+    
+</body>
+</html>
+
+<!---END OF CODE THAT I WROTE--->

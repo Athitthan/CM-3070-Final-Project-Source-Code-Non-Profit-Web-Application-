@@ -1,0 +1,52 @@
+<!---I WROTE THIS CODE-->
+{% load bootstrap4 %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      id="register_container"
+      style="
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+      "
+    >
+      <h1>Register</h1>
+      {% if registered %} 
+      {{ registered|json_script:"registered" }}
+      
+      <strong>thank you for registering. You can login now</strong>
+      <br>
+       <a href="../"><button>Log in</button></a>
+      {% else %} 
+      {% bootstrap_css %}
+      {% bootstrap_javascript jquery='full'%}
+      
+      <div id="sheet">
+        
+        <form
+        id="register_form"
+        method="post"
+        action="/register/"
+        enctype="multipart/form-data"
+        >
+        {% csrf_token %} 
+            {%bootstrap_form user_form%}
+            {%bootstrap_form profile_form%}
+            
+            <input type="submit" name="submit" value="Register" />
+        </form>
+    </div>
+      <p style="margin-top: 2vh;" >Return to login page: <a href="../">login</a> </p>
+      {% endif %}
+    </div>
+  </body>
+  </html>
+  <!--END OF CODE THAT I WROTE-->
