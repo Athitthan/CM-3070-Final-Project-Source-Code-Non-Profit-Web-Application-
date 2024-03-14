@@ -1,0 +1,49 @@
+{% load bootstrap4 %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <a style="position: absolute;left: 1vw;top: 1vh;" href="../patient_volunteer_helps"><button>back to Your Helps</button></a>
+    <div id="create_forum_post_form">
+      <h2>Create a Volunteer Task</h2>
+      <form  method="post" class="form" enctype="multipart/form-data">
+        <!--add csrf token-->
+        {% csrf_token %}
+        <!--add bootstrap-->
+        {% bootstrap_css %}
+        <!--add bootstrap js-->
+        {% bootstrap_javascript jquery='full'%}
+        
+       {% for field in form %}
+        {% if field.name != "preferred_date_time" %}
+            {% bootstrap_field field %}
+        {% endif %}
+    {% endfor %}
+    
+    <!-- Manually render the preferred_date_time field -->
+    <div class="form-group">
+        <label for="id_preferred_date_time">{{ form.preferred_date_time.label }}</label>
+        <input type="datetime-local" name="preferred_date_time" id="id_preferred_date_time" class="form-control" required>
+        <!-- Container for error message -->
+        {% if form.preferred_date_time.errors %}
+            {% for error in form.preferred_date_time.errors %}
+                <div id="date_error" style="color: rgb(221, 7, 7);font-size: small;">The preferred date and time must be at least a day after the current date.</div>
+            {% endfor %}
+        {% endif %}
+    
+    </div>
+
+        
+
+        <input id="submit_help_form" type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
+  
+
+</html>

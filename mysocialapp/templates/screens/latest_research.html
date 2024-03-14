@@ -1,0 +1,169 @@
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    
+    <title>Document</title>
+  </head>
+  <body>
+    
+
+    <!-- Navigation bar -->
+    <ul class="navbar">
+      <li class="nav-logo"><i class="fas fa-low-vision"></i> Shine In Darkness</li>
+      <div id="search_user">
+        <!-- Search input -->
+        <input id="search_input" type="text" placeholder="Search" />
+        <!-- Search results container (hidden by default) -->
+        <div style="display: none" id="search_list">
+          <ul></ul>
+        </div>
+      </div> 
+      <li class="nav-item"><a href="../disease_overview">Stargardt Disease</a></li>
+      <li class="nav-item"><a href="../profile">Profile</a></li>
+      <li class="nav-item"><a href="../forum/">Forum</a></li>
+      {% if appuser.group == 'patient' %}
+      <li class="nav-item"><a href="../patient_volunteer_helps">Need Volunteers?</a></li>
+      {% endif %}
+      {% if appuser.group == 'volunteer' %}
+      <li class="nav-item"><a href="../all_patient_volunteer_helps">Volunteer Yourself</a></li>
+      {% endif %}
+      <li class="nav-item">
+        <a href="../logout"
+          ><i
+            style="font-size: 140%; margin-right: 20px"
+            class="fas fa-sign-out-alt"
+          ></i
+        ></a>
+      </li>
+    </ul>
+   <h1 id="forum_page_title">Learn About Stargardt Disease</h1>
+   <div id="page_banner">
+     
+     <img id="page_banner_image" style="object-fit:cover;" width="80%" src="../../static/assets/pexels-polina-tankilevitch-3735769.jpeg" alt="">
+   </div>
+   
+   <div id="stargardt_info_page_main_body">
+
+     <div id="side_nav_bar">
+      <p style="font-size: 6vh;margin:2vh 10vh;" id="side_nav_bar_title">Category</p>
+       
+      <div id="side_nav_bar_content">
+
+        <h1><a href="../disease_overview">Disease Overview</a></h1>
+        <h1><a style="color: red;" href="">Latest Research</a></h1>
+        <h1><a href="../patient_story">Patient Stories</a></h1>
+        
+      </div>
+  </div>
+
+
+  <div id="information_content_container">
+    <h1>Latest Research</h1>
+
+    <div style="position: relative;" id="search_user">
+        <p style="position: absolute;top: -6vh;">search for more content:</p>
+        <!-- Search input -->
+        <input style="position: relative;" id="disease_overview_search_input" type="text" placeholder="Search For disease Overview" />
+        <!-- Search results container (hidden by default) -->
+        <div style="display:none" id="disease_overview_search_list">
+          <ul>
+            
+
+
+          </ul>
+        </div>
+        <button id="content_search" href=><i class="fas fa-search"></i></button>
+    </div>
+    {% if content %}
+    <article>
+                <h1>{{ content.title }}</h1>
+                <p style="font-style: italic;">publication_date: {{content.publication_date}}</p>
+                {% if content.link %}
+                <span>Link: <a target="_blank" href="{{content.link}}">{{content.link}}</a></span>
+                {% endif %}
+                {% if content.image %}
+                <img width="70%" height="45%" src="../../../images/{{content.image}}" alt="No Image">
+                {% endif %}
+                <div style="font-size: larger; font-family: Arial, Helvetica, sans-serif;">
+                  {{ content.summary|safe|linebreaks }}
+
+                </div>
+    </article>
+    {% elif content_list %}
+    <ul id="content_list">
+      <h1>List of content containing <span style="font-style: italic;">'{{query}}'</span></h1>
+          {% for content in content_list %}
+        <!-- Display the content of each DiseaseOverview instance -->
+        <li><a href="../latest_research/?contentId={{content.id}}#information_content_container">{{ content.title }}</a></li>
+        {% endfor %}
+          
+        </ul>
+
+    {% else %}
+    <h3 style="color:red">*Content Does Not Exist</h3>
+    {% endif %}
+
+</div>
+
+
+
+</div>
+
+
+  
+  
+
+
+
+    </body>
+      <div id="accessibility">
+    <div id="accessibility-top-section">
+      <h2>Accessibility</h2>
+      <i id="slideUp" class="fas fa-angle-up"></i>
+      <i style="display: none;" id="slideDown" class="fas fa-angle-down"></i>
+    </div>
+
+    <div style="display:none;" id="accessibility-content-container">
+  
+      <div style="margin-top: 10px;">
+    <label for="text-size">Text Size</label>
+    <div id="text-size-container">
+      <select id="text-size">
+        <option  value="100%">100%</option>
+        <option  value="125%">125%</option>
+        <option value="150%">150%</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="theme-buttons-container">
+    <label>Theme</label>
+    <div id="theme-buttons">
+      <button onclick="changeTheme('white','black')" class="theme-btn" data-theme="white">A</button>
+      <button onclick="changeTheme('black','yellow')" class="theme-btn" data-theme="black">A</button>
+      <button onclick="changeTheme('yellow','blue')" class="theme-btn" data-theme="yellow">A</button>
+    </div>
+  </div>
+
+  <div id="readAloudToggleContainer">
+    <button id="readAloudToggle">Toggle Read Aloud</button>
+  </div>
+
+  <div id="reset-btn-container">
+    <button id="reset-btn">Reset to default</button>
+  </div>
+ </div>
+</div> 
+  <!-- JavaScript file for functionality -->
+  <script src="../../static/js/profile.js"></script>
+  <script src="../../static/js/latest_research.js"></script>
+  <script src="../../static/js/accessiblity_controller.js"></script>
+
+</html>

@@ -1,0 +1,185 @@
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <title>Document</title>
+  </head>
+  <body style="margin-left: 20vw;" id="help_content_body">
+    <!---I WROTE THIS CODE-->
+    
+    <!-- User-related data -->
+    <!-- currentuser username data -->
+    {{ user.username|json_script:"username" }}
+    <!-- currentuser id data -->
+    {{ appuser.id|json_script:"id" }}
+    <!-- contact username data -->
+    {{ contact.user.username|json_script:"contact_username" }}
+    <!-- contact id data -->
+    {{contact.id|json_script:"contact_id" }}
+
+    <script>
+      // JavaScript variables
+      var id = JSON.parse(document.getElementById("id").textContent);
+      var csrftoken = "{{ csrf_token }}";
+    </script>
+{% if appuser.group == 'patient' %}
+ <a href="../patient_volunteer_helps" style="position: absolute;left: 1vw;top: 1vh;"><button>back</button></a>  
+ {% else %}
+  <a href="../all_patient_volunteer_helps" style="position: absolute;left: 1vw;top: 1vh;"><button>back</button></a>
+  {% endif %}
+
+
+
+
+<div id="help_detail_container">
+     <div id="help_user_detail_conatiner" >
+              <img
+              {% if volunteer_help.user.profile_image %}
+                src="../../../images/{{volunteer_help.user.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+              
+              <p style="margin-top: 6vh;" >{{ volunteer_help.user.name }}</p>
+              
+            </div>
+     <h1 id="help_title">Title: {{volunteer_help.title}}</h1>   
+     <div id="help_description_container">
+        <h3 style="margin-bottom:4px ;">Description: </h3>
+        <textarea style="resize:none;padding:12px;font-family:'Arial';" readonly rows=12 cols=77>{{volunteer_help.description}}</textarea>
+     </div>
+     <p id="help_createdAt">Created at: <strong>{{volunteer_help.created_at}}</strong></p>
+     <p id="help_date&time">Event date&time: <strong style="color: red;">{{volunteer_help.preferred_date_time}}</strong></p>
+     <p id="help_location">Location: <strong style="color: red;">{{volunteer_help.location}}</strong></p>
+
+     <p id="help_duration">Event duration: <strong>{{volunteer_help.duration}} hrs</strong></p>
+     <p id="help_req_vol">Required no. of volunteers: <strong>{{volunteer_help.volunteer_limit}}</strong></p>
+     <p id="help_curr_vol">current no. of volunteers: <strong>{{volunteer_count}}</strong></p>
+     <p>E-mail: <strong>{{volunteer_help.user.email}}</strong></p>
+     <p>Category: <strong>{{volunteer_help.get_category_display}}</strong></p>
+     
+   {% if appuser.group == "volunteer" %}
+     <form method="post" action="../api/commit_to_volunteer_help/">
+             {% csrf_token %}
+            <!-- Hidden fields for Comment model -->
+            <input type="hidden" name="volunteer_help" value="{{ volunteer_help.id }}"/>
+            <input type="hidden" name="user" value="{{ appuser.id }}"/>
+
+            <button type="submit" style="background-color:rgba(63, 145, 200, 0.482);"><i class="fas fa-check"></i>Commit</button>
+                    
+     </form>
+     {% endif %}
+
+
+     
+  </div>
+
+
+
+<h2 id="volunteer_title">Volunteers</h2>
+
+
+
+
+    {% for volunteered_help in volunteered_helps %}
+    
+        <div class="volunteer_container">
+            
+                 <div class="volunteer_user_details" >
+              <img
+              {% if volunteered_help.user.profile_image %}
+                src="../../../images/{{volunteered_help.user.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+              
+                <p>{{volunteered_help.user.name }}</p>
+            </div>
+             <p  class="volunteer_details">email: <strong>{{volunteered_help.user.email}}</strong></p>
+             <p  class="volunteer_details">group: <strong >{{volunteered_help.user.group}}</strong></p>
+             <p  class="volunteer_details">Registered at: <strong>{{volunteered_help.created_at}}</strong></p>
+             {% if appuser.group == 'patient' %}
+             <a class="volunteer_chat_button" href="../chatRoom/{{volunteered_help.user.user.username}}"> 
+              <button>Chat</button>
+              <p id="chat_notification_{{volunteered_help.user.id}}" class="vol_chat_notification_display"></p>
+              </a>
+              <a class="volunteered_help_delete_button" href="../deleteVolunteer/{{volunteered_help.id}}/{{volunteer_help.id}}" ><button style="background-color: red;">Remove</button></a>
+
+            <script>
+                  fetch("http://127.0.0.1:8080/check_unread_message/?sender_username={{volunteered_help.user.user.username}}")
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log(data);
+                    if (data.unread_count > 0) {
+                      chatNotifDisplay=document.querySelector("#chat_notification_{{volunteered_help.user.id}}");
+                      chatNotifDisplay.textContent=data.unread_count;
+                      chatNotifDisplay.setAttribute("style","width:3vh;height:3vh")
+                    }
+                  });
+           </script>
+           {% endif %}
+        
+    </div>
+        {% empty %}
+        <h2>No Volunteers Yet.</h2>
+        {% endfor %}
+        
+    <footer id="forum_post_content_footer"></footer>
+
+
+
+
+    </body>
+     <div id="accessibility">
+    <div id="accessibility-top-section">
+      <h2>Accessibility</h2>
+      <i id="slideUp" class="fas fa-angle-up"></i>
+      <i style="display: none;" id="slideDown" class="fas fa-angle-down"></i>
+    </div>
+
+    <div style="display:none;" id="accessibility-content-container">
+  
+      <div style="margin-top: 10px;">
+    <label for="text-size">Text Size</label>
+    <div id="text-size-container">
+      <select id="text-size">
+        <option  value="100%">100%</option>
+        <option  value="125%">125%</option>
+        <option value="150%">150%</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="theme-buttons-container">
+    <label>Theme</label>
+    <div id="theme-buttons">
+      <button onclick="changeTheme('white','black')" class="theme-btn" data-theme="white">A</button>
+      <button onclick="changeTheme('black','yellow')" class="theme-btn" data-theme="black">A</button>
+      <button onclick="changeTheme('yellow','blue')" class="theme-btn" data-theme="yellow">A</button>
+    </div>
+  </div>
+
+  <div id="readAloudToggleContainer">
+    <button id="readAloudToggle">Toggle Read Aloud</button>
+  </div>
+
+  <div id="reset-btn-container">
+    <button id="reset-btn">Reset to default</button>
+  </div>
+ </div>
+</div> 
+  <!-- JavaScript file for functionality -->
+ 
+  <script src="../../static/js/accessiblity_controller.js"></script>
+  
+</html>

@@ -1,17 +1,29 @@
 <!---I WROTE THIS CODE-->
 {% load bootstrap4 %} 
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../static/css/css.css">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
     <title>Document</title>
 </head>
-<body>
-    <div
-    id="login_container"
-    
-    >
+<body id="login_body" >
+    <ul style="justify-content: space-around;margin: 0;" class="navbar">
+      <li class="nav-logo"><i class="fas fa-low-vision"></i> Shine In Darkness</li>
+     
+      <li class="nav-item"><a style="color: red;" href="">Log in</a></li>
+      <li class="nav-item"><a href="../about_us">About Us</a></li>
+      
+     
+     
+      
+    </ul>
+    <h2 id="background_text">A dedicated platform to serve the Stargardt's Community</h2>
+    <div style="margin-top: 50px;" id="login_container">
     <h1>Login</h1>
     <div id="sheet">
         
@@ -38,5 +50,8 @@
 
 
 </body>
+
+
+
 </html>
 <!--END OF CODE THAT I WROTE-->

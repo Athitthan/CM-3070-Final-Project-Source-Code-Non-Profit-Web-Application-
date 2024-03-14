@@ -1,0 +1,262 @@
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <title>Document</title>
+  </head>
+  <body>
+    <!---I WROTE THIS CODE-->
+    
+    <!-- User-related data -->
+    <!-- currentuser username data -->
+    {{ user.username|json_script:"username" }}
+    <!-- currentuser id data -->
+    {{ appuser.id|json_script:"id" }}
+    <!-- contact username data -->
+    {{ contact.user.username|json_script:"contact_username" }}
+    <!-- contact id data -->
+    {{contact.id|json_script:"contact_id" }}
+
+    <script>
+      // JavaScript variables
+      var id = JSON.parse(document.getElementById("id").textContent);
+      var csrftoken = "{{ csrf_token }}";
+    </script>
+
+    <!-- Navigation bar -->
+    <ul class="navbar">
+      <li class="nav-logo"><i class="fas fa-low-vision"></i> Shine In Darkness</li>
+      <div id="search_user">
+        <!-- Search input -->
+        <input id="search_input" type="text" placeholder="Search" />
+        <!-- Search results container (hidden by default) -->
+        <div style="display: none" id="search_list">
+          <ul></ul>
+        </div>
+      </div>
+      <li class="nav-item"><a href="../disease_overview">Stargardt Disease</a></li>
+
+      <li class="nav-item"><a style="color: red;" href="../profile">Profile</a></li>
+      <li class="nav-item"><a href="../forum">Forum</a></li>
+      {% if appuser.group == 'patient' %}
+      <li class="nav-item"><a href="../patient_volunteer_helps">Need Volunteers?</a></li>
+      {% endif %}
+
+      {% if appuser.group == 'volunteer' %}
+      <li class="nav-item"><a href="../all_patient_volunteer_helps">Volunteer Yourself</a></li>
+      {% endif %}
+      
+      <li class="nav-item">
+        <a href="../logout"
+          ><i
+            style="font-size: 140%; margin-right: 20px"
+            class="fas fa-sign-out-alt"
+          ></i
+        ></a>
+      </li>
+    </ul>
+    <!-- Background image container -->
+    <div id="background_image_container">
+      <img id="background_image" src="" alt="no image" />
+    </div>
+    <!-- Profile details container -->
+    <div id="profile_detail_container">
+      <img id="profile_image" src="" alt="no image" />
+      <div id="profile_detail">
+        <h1 id="profile_name" style="margin: 0"></h1>
+        <p style="margin: 4px 0" id="email">
+          E-mail: 
+          <a href="mailto:youremail@example.com"></a>
+        </p>
+        <div>
+          <span>Group: </span>
+          {% if not contact %}
+          <p style="margin: 4px 0;display: inline-block;font-weight: bold;" id="">{{appuser.group}} </p>
+          {% else %}
+          <p style="margin: 4px 0;display: inline-block;font-weight: bold;" id="">{{contact.group}} </p>
+          {% endif %}
+        </div>
+        <div>
+          <span>Bio: </span>
+          <p style="margin: 4px 0;display: inline-block;" id="bio"> </p>
+        </div>
+        
+      </div>
+      {% if not contact %}
+      <!-- Edit profile button -->
+      <button id="edit_profile_button">
+        <a href="../update_user_profile/{{appuser.id}}">Edit Profile</a>
+      </button>
+      
+
+      {% else %}
+      <!-- Friend form for following -->
+      
+      <a id="add_friend" href="">
+        
+        
+      </a>
+      {% endif %}
+    </div>
+    <div id="main_body">
+      {% if not contact %}
+      <!-- Friend list container -->
+      <div id="list_container">
+        <h1>Friend List</h1>
+        <ul id="friend_list_container">
+          <h3 id="empty_friend_list_display">List Empty</h3>
+        </ul>
+        <h1>Request List</h1>
+        <ul id="request_list_container">
+          <h3  id="empty_request_list_display">List Empty</h3>
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- Gallery container -->
+      <div id="gallery_container">
+        <h1>Gallery</h1>
+        {% if not contact %}
+        <div id="input">
+          <!-- Form for uploading images -->
+          <form
+            action="/api/galleryDetail/"
+            method="post"
+            class="form"
+            enctype="multipart/form-data"
+            onsubmit="return validateForm()"
+          >
+            {% csrf_token %}
+            <label for="image">Upload Media:</label><br />
+            <input type="file" id="image" name="post_media" accept="image/*,video/*"/>
+            <span
+              id="fileErrorMsg"
+              style="
+                color: red;
+                position: relative;
+                left: -60px;
+                font-size: 1vw;
+              "
+            ></span
+            ><br />
+            <!-- Display error message here -->
+            <br />
+            <label for="description">Description:</label><br />
+            <input
+              type="text"
+              size="50"
+              id="description"
+              name="description"
+            /><br /><br />
+            <input type="hidden" value="{{appuser.id}}" name="appuser" />
+            <input type="submit" value="Submit" />
+          </form>
+          <!-- JavaScript function for form validation -->
+          
+        </div>
+       
+        {%endif%}
+
+        <!-- Post container -->
+        <ul id="post_container">
+          <h1 id="no_post">No Post</h1>
+        </ul>
+      </div>
+       <script>
+            function validateForm() {
+              // Get the file input element and the error message element
+              var fileInput = document.getElementById("image");
+              var fileErrorMsg = document.getElementById("fileErrorMsg");
+
+              // Check if a file has been selected
+              if (fileInput.files.length === 0) {
+                fileErrorMsg.textContent =
+                  "Please select a file before submitting.";
+                return false; // Prevent form submission
+              }
+
+              // Clear the error message if a file is selected
+              fileErrorMsg.textContent = "";
+
+              return true; // Allow form submission
+            }
+          </script>
+
+      <!-- Status container -->
+      <div id="status_container">
+        <h1>Status</h1>
+        <div id="background">
+          <div id="status"></div>
+        </div>
+        {% if not contact %}
+        <!-- Form for updating status -->
+        <form
+          method="post"
+          action="../updateStatus/{{appuser.id}}"
+          id="status_form"
+        >
+          {% csrf_token %}
+          <label for="status_input">Whats on your mind: </label>
+          <br />
+          <input id="status_input" type="text" name="statusText" />
+
+          <br /><br />
+          <input id="status_submit" type="submit" value="Submit" />
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+  <div id="accessibility">
+    <div id="accessibility-top-section">
+      <h2>Accessibility</h2>
+      <i id="slideUp" class="fas fa-angle-up"></i>
+      <i style="display: none;" id="slideDown" class="fas fa-angle-down"></i>
+    </div>
+
+    <div style="display:none;" id="accessibility-content-container">
+  
+      <div style="margin-top: 10px;">
+    <label for="text-size">Text Size</label>
+    <div id="text-size-container">
+      <select id="text-size">
+        <option  value="100%">100%</option>
+        <option  value="125%">125%</option>
+        <option value="150%">150%</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="theme-buttons-container">
+    <label>Theme</label>
+    <div id="theme-buttons">
+      <button onclick="changeTheme('white','black')" class="theme-btn" data-theme="white">A</button>
+      <button onclick="changeTheme('black','yellow')" class="theme-btn" data-theme="black">A</button>
+      <button onclick="changeTheme('yellow','blue')" class="theme-btn" data-theme="yellow">A</button>
+    </div>
+  </div>
+
+  <div id="readAloudToggleContainer">
+    <button id="readAloudToggle">Toggle Read Aloud</button>
+  </div>
+
+  <div id="reset-btn-container">
+    <button id="reset-btn">Reset to default</button>
+  </div>
+ </div>
+</div> 
+  <!-- JavaScript file for functionality -->
+  <script src="../../static/js/profile.js"></script>
+  <script src="../../static/js/accessiblity_controller.js"></script>
+</html>
+
+<!--END OF CODE THAT I WROTE-->
+
+
+

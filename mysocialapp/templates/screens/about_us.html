@@ -1,0 +1,115 @@
+<!---I WROTE THIS CODE-->
+{% load bootstrap4 %} 
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/css/css.css">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <title>Document</title>
+</head>
+<body id="about_us_body">
+    <ul style="justify-content: space-around;" class="navbar">
+      <li class="nav-logo"><i class="fas fa-low-vision"></i> Shine In Darkness</li>
+     
+      <li class="nav-item"><a  href="../">Log in</a></li>
+      <li class="nav-item"><a style="color: red;" href="">About Us</a></li>
+      
+     
+     
+      
+    </ul>
+    <h2 id="background_text">A dedicated platform to serve the Stargardt's Community</h2>
+    <div id="about_us_content">
+  <header>
+        <h1>About Us</h1>
+        <p>Welcome to Shine In Darkness</p>
+    </header>
+
+    <section>
+        <h2>Our Vision</h2>
+        <p>At Shine In Darkness, we envision a world where individuals living with Stargardt disease can thrive, supported by a compassionate and understanding community.</p>
+    </section>
+
+    <section>
+        <h2>Our Mission</h2>
+        <p>Our mission is to foster a sense of belonging and empowerment among individuals affected by Stargardt disease.</p>
+        <ul>
+            <li>Provide a safe and inclusive environment for open discussions and information sharing.</li>
+            <li>Offer resources and support to help individuals better understand and manage their condition.</li>
+            <li>Facilitate connections and relationships among community members, fostering a sense of solidarity and mutual support.</li>
+            <li>Raise awareness about Stargardt disease and advocate for increased understanding and accessibility.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>What We Offer</h2>
+        <ul>
+            <li>Community Forums: Engage in discussions, ask questions, and share experiences with others in the Stargardt community.</li>
+            <li>News and Research: Stay updated with the latest news and research developments related to Stargardt disease.</li>
+            <li>Volunteer Assistance: Connect with volunteers offering support and assistance tailored to your needs.</li>
+            <li>Accessibility Features: Our platform is designed with accessibility in mind, ensuring that individuals with visual impairments can fully participate and engage.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Our Commitment</h2>
+        <p>At Shine In Darkness, we are committed to providing a welcoming and supportive environment for all individuals affected by Stargardt disease.</p>
+        <p>We adhere to principles of inclusivity, respect, and confidentiality, and we strive to create a space where everyone feels valued and heard.</p>
+    </section>
+
+    <section>
+        <h2>Get Involved</h2>
+        <p>Join us in our mission to support individuals living with Stargardt disease.</p>
+        <p>Whether you're looking to connect with others, share your story, or contribute to our community, we welcome your participation and involvement.</p>
+    </section>
+
+    <footer>
+        &copy; 2024 Shine In Darkness. All rights reserved.
+    </footer>
+    </div>
+</body>
+<div id="accessibility">
+    <div id="accessibility-top-section">
+      <h2>Accessibility</h2>
+      <i id="slideUp" class="fas fa-angle-up"></i>
+      <i style="display: none;" id="slideDown" class="fas fa-angle-down"></i>
+    </div>
+
+    <div style="display:none;" id="accessibility-content-container">
+  
+      <div style="margin-top: 10px;">
+    <label for="text-size">Text Size</label>
+    <div id="text-size-container">
+      <select id="text-size">
+        <option  value="100%">100%</option>
+        <option  value="125%">125%</option>
+        <option value="150%">150%</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="theme-buttons-container">
+    <label>Theme</label>
+    <div id="theme-buttons">
+      <button onclick="changeTheme('black','yellow')" class="theme-btn" data-theme="black">A</button>
+      <button onclick="changeTheme('yellow','blue')" class="theme-btn" data-theme="yellow">A</button>
+    </div>
+  </div>
+
+  <div id="readAloudToggleContainer">
+    <button id="readAloudToggle">Toggle Read Aloud</button>
+  </div>
+
+  <div id="reset-btn-container">
+    <button id="reset-btn">Reset to default</button>
+  </div>
+ </div>
+</div> 
+
+<script src="../../static/js/accessiblity_controller.js"></script>
+</html>
+<!--END OF CODE THAT I WROTE-->

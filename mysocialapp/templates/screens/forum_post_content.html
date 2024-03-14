@@ -1,0 +1,177 @@
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <title>Document</title>
+  </head>
+  <body style="margin-left: 20vw;" id="post_content_body">
+    <!---I WROTE THIS CODE-->
+    
+    <!-- User-related data -->
+    <!-- currentuser username data -->
+    {{ user.username|json_script:"username" }}
+    <!-- currentuser id data -->
+    {{ appuser.id|json_script:"id" }}
+    <!-- contact username data -->
+    {{ contact.user.username|json_script:"contact_username" }}
+    <!-- contact id data -->
+    {{contact.id|json_script:"contact_id" }}
+
+    <script>
+      // JavaScript variables
+      var id = JSON.parse(document.getElementById("id").textContent);
+      var csrftoken = "{{ csrf_token }}";
+    </script>
+
+ <a style="position: absolute;left: 1vw;top: 1vh;" href="../forum"><button>back to Forum</button></a>   
+<div id="forum_post_content">
+     <div id="post_user_details" >
+              <img
+              {% if post.creator.profile_image %}
+                src="../../../images/{{post.creator.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+              
+              <p>{{ post.creator.name }}</p>
+              <p style="font-style: italic;">{{post.created_at.date}}</p>
+            </div>
+     <h1  id="post_title">{{post.title}}</h1>
+     {% if post.image %}
+     <img  id="forum_post_img" src="../../../images/{{post.image}}" alt=""/>
+     {% endif %}
+     <p id="post_content">{{post.content}}</p>
+     <p style="justify-content: center;" class="post_comment_count"> <i class="fas fa-comment-alt"></i>{{comment_count}}</p>
+  </div>
+
+
+
+<h2>Comments</h2>
+
+<form id="comment_form" method="post" action="../api/forumCommentDetail/">
+    {% csrf_token %}
+
+    <!-- Comment content field -->
+    <label for="comment_text">Add Comment:</label> <br>
+    <textarea name="content" id="comment_text" rows="4" cols="50"></textarea>
+      <p id="validation_message" style="color: red;  "></p>
+    <!-- Hidden fields for Comment model -->
+    <input type="hidden" name="post" value="{{ post.id }}"/>
+    <input type="hidden" name="creator" value="{{ appuser.id }}"/>
+    
+    <button style="margin-bottom:2vh ;" type="submit">Post Comment</button>
+</form>
+<script>
+    // Function to validate the form before submission
+    function validateForm() {
+        // Get the comment text entered by the user
+        var commentText = document.getElementById("comment_text").value;
+
+        // Check if the comment text is empty
+        if (commentText.trim() === "") {
+            // Display the validation message
+            document.getElementById("validation_message").innerText = "**Text field cannot be empty";
+            
+            // Prevent the form from submitting
+            return false;
+        }
+
+        // If the comment text is not empty, allow the form to submit
+        return true;
+    }
+
+    // Attach the validateForm function to the form's onsubmit event
+    document.getElementById("comment_form").onsubmit = validateForm;
+</script>
+
+<div id="comments_replies_container"> 
+
+    {% for comment,replies,reply_count in post_comments %}
+    
+        <div id="comment_container_{{comment.id}}" class="comment_container">
+            
+                 <div class="commenter_details" >
+              <img
+              {% if comment.creator.profile_image %}
+                src="../../../images/{{comment.creator.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+              
+              <p>{{ comment.creator.name }}</p>
+              <p style="font-style: italic;">{{comment.created_at.date}}</p>
+            </div>
+             <p style="margin:0 0 0 4.2vw ; width: 30vw;  " class="forum_post_title">{{comment.content}}<p>
+              <div class="comment_settings" style="margin:0 0 0 4.2vw ;  ">
+                {% if reply_count > 0 %}
+                <a comment_id="{{comment.id}}" style="margin: 0;" class="see_reply_button"  href=""><i class="fas fa-chevron-down"></i> {{reply_count}} Replies</a>
+                <a comment_id="{{comment.id}}" style="margin: 0;display: none;" class="nosee_reply_button"  href=""><i class="fas fa-chevron-up"></i> {{reply_count}} Replies</a>
+                {%endif%}
+                <a comment_id="{{comment.id}}" class="add_reply"  href=""><i class="fas fa-reply"></i>Reply</a>
+                {% if comment.creator.id == appuser.id or post.creator.id == appuser.id %}
+                <a class="forum_comment_delete_button" href="../deleteForumPostComment/{{comment.id}}/{{post.id}}" ><i class="fas fa-trash-alt"></i></a>
+                {% endif %}
+              </div>
+              
+              <form comment_id="{{comment.id}}" style="display:none;" class="reply_form" action="../api/forumReplyDetail/" method="post" >
+                  {% csrf_token %}
+                  <!-- Comment content field -->
+                  <label for="comment_text">Add Reply:</label> <br>
+                  <textarea name="content" id="reply_text" rows="3" cols="50"></textarea>
+                   <input type="hidden" name="comment" value="{{ comment.id }}"/>
+                   <input type="hidden" name="creator" value="{{ appuser.id }}"/>
+                   <input type="hidden" name="post" value="{{ post.id }}"/>
+                   
+                    <button style="margin-bottom:2vh ;" type="submit">Post Reply</button>
+              </form>
+              
+              
+              {% for reply in replies %}
+                <div style="display: none;" comment_id="{{comment.id}}" id="reply_container_{{reply.id}}" class="reply_container">
+                <div class="commenter_details" >
+              <img
+              {% if reply.creator.profile_image %}
+                src="../../../images/{{reply.creator.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+              
+              <p>{{ reply.creator.name }}</p>
+              <p style="font-style: italic;">{{reply.created_at.date}}</p>
+            </div>
+             <p style="margin:0 0 0 4.2vw ; width: 30vw;  " class="forum_post_title">{{reply.content}}<p>
+              {% if reply.creator.id == appuser.id or post.creator.id == appuser.id %}
+                <a class="forum_reply_delete_button" href="../deleteForumPostReply/{{reply.id}}/{{post.id}}" ><i class="fas fa-trash-alt"></i></a>
+                {% endif %}
+              
+              
+            </div>
+            {% endfor %}
+            <br>
+        
+        {% empty %}
+        <h2>No Comments Found.</h2>
+        {% endfor %}
+        
+    </div>
+    <footer id="forum_post_content_footer"></footer>
+
+
+
+
+    </body>
+  <!-- JavaScript file for functionality -->
+  <script src="../../static/js/forum_post_content.js"></script>
+</html>

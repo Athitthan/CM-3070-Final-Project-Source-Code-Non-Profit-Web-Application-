@@ -1,0 +1,28 @@
+{% load bootstrap4 %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <a style="position: absolute;left: 1vw;top: 1vh;" href="../forum"><button>back</button></a>
+    <div id="create_forum_post_form">
+      <h2>Update Forum Post</h2>
+      <form  method="post" class="form" enctype="multipart/form-data">
+        <!--add csrf token-->
+        {% csrf_token %}
+        <!--add bootstrap-->
+        {% bootstrap_css %}
+        <!--add bootstrap js-->
+        {% bootstrap_javascript jquery='full'%}
+        <!--add form-->
+        {% bootstrap_form form %}
+
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>

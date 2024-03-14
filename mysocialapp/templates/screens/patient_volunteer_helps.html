@@ -1,0 +1,195 @@
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    
+    <title>Document</title>
+  </head>
+  <body>
+    <!---I WROTE THIS CODE-->
+    
+    <!-- User-related data -->
+    <!-- currentuser username data -->
+    {{ user.username|json_script:"username" }}
+    <!-- currentuser id data -->
+    {{ appuser.id|json_script:"id" }}
+    <!-- contact username data -->
+    {{ contact.user.username|json_script:"contact_username" }}
+    <!-- contact id data -->
+    {{contact.id|json_script:"contact_id" }}
+
+    <script>
+      // JavaScript variables
+      var id = JSON.parse(document.getElementById("id").textContent);
+      var csrftoken = "{{ csrf_token }}";
+    </script>
+
+    <!-- Navigation bar -->
+    <ul class="navbar">
+      <li class="nav-logo"><i class="fas fa-low-vision"></i> Shine In Darkness</li>
+      <div id="search_user">
+        <!-- Search input -->
+        <input id="search_input" type="text" placeholder="Search" />
+        <!-- Search results container (hidden by default) -->
+        <div style="display: none" id="search_list">
+          <ul></ul>
+        </div>
+      </div>
+      <li class="nav-item"><a href="../disease_overview">Stargardt Disease</a></li>
+      <li class="nav-item"><a href="../profile">Profile</a></li>
+      <li class="nav-item"><a href="../forum/">Forum</a></li>
+      {% if appuser.group == 'patient' %}
+      <li class="nav-item"><a style="color: red;" href="../patient_volunteer_helps">Need Volunteers?</a></li>
+      {% endif %}
+      <li class="nav-item">
+        <a href="../logout"
+          ><i
+            style="font-size: 140%; margin-right: 20px"
+            class="fas fa-sign-out-alt"
+          ></i
+        ></a>
+      </li>
+    </ul>
+   <h1 id="forum_page_title">Register for Volunteer Help</h1>
+   <div id="page_banner">
+     
+     <img style="object-fit:fit;" width="80%" src="../../static/assets/pexels-pixabay-461049.jpeg" alt="">
+   </div>
+   <div id="forum_top_section">
+     
+  <div id="post">
+    
+    <a href="../create_help/{{appuser.id}}">
+      <button id="post_button">Register+</button>
+    </a>
+  </div>
+
+</div>
+
+<h2>Your Helps</h2>
+{% if expired_helps_info %}
+        <h3 style="color: red;">Expired and Deleted Helps</h3>
+        <ul style="color: red;">
+            {% for help in expired_helps_info %}
+                <li><strong>{{ help.title }}</strong> ({{ help.category }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+<table id="user_help_table"> 
+  <thead>
+            <tr>
+                <th>User</th>
+                <th>Title</th>
+                <th>Event Date/Time</th>
+                <th>Loc</th>
+
+                <th>Duration(hrs)</th>
+                 <th>Category</th>
+                <th>vol. req.</th>
+                <th>curr. vol.</th>
+
+            </tr>
+        </thead>
+
+    <tbody>
+            {% for help,vol_count in upcoming_helps %}
+                <tr>
+                    <td>
+                      <img
+              {% if help.user.profile_image %}
+                src="../../../images/{{help.user.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+                      <p>{{ help.user.name }}</p>
+                      
+
+
+                    </td>
+                    <td>{{ help.title }}</td>
+                    
+                    <td>{{ help.preferred_date_time }}</td>
+                    <td>{{ help.location }}</td>
+                    
+                    <td>{{ help.duration }}</td>
+                    <td>{{ help.get_category_display }}</td>
+                    <td>{{ help.volunteer_limit }}</td>
+                    <td>{{ vol_count }}</td>
+
+                    
+                    <td>
+                     <a style="margin: 1vh 0;" href="../view_help_detail/?helpId={{help.id}}"><button style="background-color:rgba(49, 208, 150, 0.482);"><i class="fas fa-eye"></i>View details</button></a> 
+                     <a href="../update_help/{{help.id}}"><button style="background-color:rgba(63, 145, 200, 0.482);"><i class="fas fa-edit"></i>Edit</button></a>
+                     <a style="margin: 1vh 0;" href="../deleteHelp/{{help.id}}"><button style="background-color:lightcoral;"><i class="fas fa-trash-alt"></i>Delete</button></a>
+
+
+                   </td>
+
+
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" ><h2 style="margin-top: 10vh;">No Tasks Yet.</h2></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+          </table>
+
+
+
+
+
+    </body>
+    <div style="right: 150px;" id="accessibility">
+    <div id="accessibility-top-section">
+      <h2>Accessibility</h2>
+      <i id="slideUp" class="fas fa-angle-up"></i>
+      <i style="display: none;" id="slideDown" class="fas fa-angle-down"></i>
+    </div>
+
+    <div style="display:none;" id="accessibility-content-container">
+  
+      <div style="margin-top: 10px;">
+    <label for="text-size">Text Size</label>
+    <div id="text-size-container">
+      <select id="text-size">
+        <option  value="100%">100%</option>
+        <option  value="125%">125%</option>
+        <option value="150%">150%</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="theme-buttons-container">
+    <label>Theme</label>
+    <div id="theme-buttons">
+      <button onclick="changeTheme('white','black')" class="theme-btn" data-theme="white">A</button>
+      <button onclick="changeTheme('black','yellow')" class="theme-btn" data-theme="black">A</button>
+      <button onclick="changeTheme('yellow','blue')" class="theme-btn" data-theme="yellow">A</button>
+    </div>
+  </div>
+
+  <div id="readAloudToggleContainer">
+    <button id="readAloudToggle">Toggle Read Aloud</button>
+  </div>
+
+  <div id="reset-btn-container">
+    <button id="reset-btn">Reset to default</button>
+  </div>
+ </div>
+</div> 
+  <!-- JavaScript file for functionality -->
+  <script src="../../static/js/profile.js"></script>
+  <script src="../../static/js/accessiblity_controller.js"></script>
+
+</html>

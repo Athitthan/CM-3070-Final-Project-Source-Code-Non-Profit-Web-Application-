@@ -1,0 +1,164 @@
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/css/css.css" />
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    
+    <title>Document</title>
+  </head>
+  <body>
+    <!---I WROTE THIS CODE-->
+    
+    <!-- User-related data -->
+    <!-- currentuser username data -->
+    {{ user.username|json_script:"username" }}
+    <!-- currentuser id data -->
+    {{ appuser.id|json_script:"id" }}
+    <!-- contact username data -->
+    {{ contact.user.username|json_script:"contact_username" }}
+    <!-- contact id data -->
+    {{contact.id|json_script:"contact_id" }}
+
+    <script>
+      // JavaScript variables
+      var id = JSON.parse(document.getElementById("id").textContent);
+      var csrftoken = "{{ csrf_token }}";
+    </script>
+
+    <a href="../all_patient_volunteer_helps" ><button>back</button></a>
+   
+    <h1 id="forum_page_title">Your Commits Page</h1>
+   <div id="forum_top_section">
+     
+  
+
+</div>
+
+
+<h2>Your Commits</h2>
+
+<table id="user_help_table"> 
+  <thead>
+            <tr>
+                <th>User</th>
+                <th>Title</th>
+                <th>Event Date/Time</th>
+                <th>Loc</th>
+
+                <th>Duration(hrs)</th>
+                 <th>Category</th>
+                <th>vol. req.</th>
+                <th>curr. vol.</th>
+
+            </tr>
+        </thead>
+
+    <tbody>
+            {% for help,vol_count,any_field_changed in commits %}
+                <tr>
+                    <td>
+                      <img
+              {% if help.user.profile_image %}
+                src="../../../images/{{help.user.profile_image}}"
+                {% else %}
+                src="../../static/assets/blank-profile.jpeg"
+                {% endif %}
+                alt=""
+              />
+                      <p>{{ help.user.name }}</p>
+                      
+
+
+                    </td>
+                    <td>{{ help.title }}</td>
+                    
+                    <td>{{ help.preferred_date_time }}</td>
+                    <td>{{ help.location }}</td>
+
+                    <td>{{ help.duration }}</td>
+                    <td>{{ help.get_category_display }}</td>
+                    <td>{{ help.volunteer_limit }}</td>
+                    <td>{{ vol_count }}</td>
+
+                    
+                    <td>
+                     <a style="margin: 1vh 0;position: relative;;" href="../view_commit_detail/?helpId={{help.id}}"><button style="background-color:rgba(49, 208, 150, 0.482);"><i class="fas fa-eye"></i>View details</button>
+                    
+                       {% if any_field_changed %}
+                       <p style="left:0.3vh" id="commit_button_notif"><i class="fas fa-exclamation-circle"></i></p>
+                        {% endif %}
+                    </a> 
+                     <a style="margin: 1vh 0;" href="../unCommit/{{help.id}}"><button style="background-color:lightcoral;"><i class="fas fa-trash-alt"></i>Uncommit</button></a>
+
+
+                   </td>
+
+
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" ><h2 style="margin-top: 10vh;">No Commits Yet.</h2></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+          </table>
+
+
+
+
+
+    </body>
+      <div id="accessibility">
+    <div id="accessibility-top-section">
+      <h2>Accessibility</h2>
+      <i id="slideUp" class="fas fa-angle-up"></i>
+      <i style="display: none;" id="slideDown" class="fas fa-angle-down"></i>
+    </div>
+
+    <div style="display:none;" id="accessibility-content-container">
+  
+      <div style="margin-top: 10px;">
+    <label for="text-size">Text Size</label>
+    <div id="text-size-container">
+      <select id="text-size">
+        <option  value="100%">100%</option>
+        <option  value="125%">125%</option>
+        <option value="150%">150%</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="theme-buttons-container">
+    <label>Theme</label>
+    <div id="theme-buttons">
+      <button onclick="changeTheme('white','black')" class="theme-btn" data-theme="white">A</button>
+      <button onclick="changeTheme('black','yellow')" class="theme-btn" data-theme="black">A</button>
+      <button onclick="changeTheme('yellow','blue')" class="theme-btn" data-theme="yellow">A</button>
+    </div>
+  </div>
+
+  <div id="readAloudToggleContainer">
+    <button id="readAloudToggle">Toggle Read Aloud</button>
+  </div>
+
+  <div id="reset-btn-container">
+    <button id="reset-btn">Reset to default</button>
+  </div>
+ </div>
+</div> 
+  <!-- JavaScript file for functionality -->
+  <script src="../../static/js/profile.js"></script>
+  <script src="../../static/js/accessiblity_controller.js"></script>
+  {% if help_expired %}
+  <script>
+    alert("Request denied.Commit has already expired!! ");
+  </script>
+  {% endif %}
+</html>

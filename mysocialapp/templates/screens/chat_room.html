@@ -8,7 +8,11 @@
     <title>Chat Room</title>
 </head>
 <body>
-    <a id="back_home_link" href="../home"><button>Home page</button></a>
+
+    
+    <a id="back_home_link" onclick="goBack()"><button>Back</button></a>
+    
+    
     <h1>Chat Room: {{room_name}}</h1>
 
     <div id="chat-log">
@@ -20,11 +24,15 @@
     <input  id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     {{ username|json_script:"username" }}
+    {{ contact_username|json_script:"contact_username" }}
+
 
     <script>
         // Get roomName and username from the HTML elements
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const username = JSON.parse(document.getElementById('username').textContent);
+const contactUsername = JSON.parse(document.getElementById('contact_username').textContent);
+
 
 // Create a WebSocket connection to the chat room
 const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/' + roomName + '/');
@@ -107,6 +115,25 @@ chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
 
+function goBack() {
+       
+    // sending messages
+        chatSocket.send(JSON.stringify({
+        'message': "",
+        'receiver': contactUsername
+       }));
+       
+      // Check if the referrer is present
+      if (document.referrer) {
+       window.location.href = document.referrer; // Navigate back and refresh
+        } 
+      else {
+       window.history.back(); // Fallback if no referrer is available
+        }
+     }
+
+
+
 // Focus on the message input field and enable sending messages on 'Enter' key press
 document.querySelector('#chat-message-input').focus();
 document.querySelector('#chat-message-input').onkeyup = function(e) {
@@ -115,16 +142,23 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
     }
 };
 
+
+
+
 // Handle sending messages when the submit button is clicked
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
     
     // Send the message via WebSocket
-    chatSocket.send(JSON.stringify({
-        'message': message
-    }));
-    
+    if(message!=""){
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'receiver':contactUsername
+        }));
+        
+    }
     // Clear the message input field
     messageInputDom.value = '';
 };
