@@ -19,9 +19,10 @@ Before you begin, ensure you have the following tools installed on your system:
 
    Start by cloning the project repository to your local machine:
 
-   ```CLI
+   ```bash
    git clone https://github.com/Athitthan/CM-3070-final-project-web-app-souce-code.git
-   cd CM-3070-final-project-web-app-souce-code ```
+   cd CM-3070-final-project-web-app-souce-code
+   ```
 
 
 #### Using `virtualenv`
@@ -32,7 +33,7 @@ Before you begin, ensure you have the following tools installed on your system:
    virtualenv venv
    source venv/bin/activate  # On Unix or MacOS
    .\venv\Scripts\activate  # On Windows
-   ```
+  ```
 
 
 #### Common Steps
