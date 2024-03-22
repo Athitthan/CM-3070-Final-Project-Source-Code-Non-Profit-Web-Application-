@@ -21,8 +21,8 @@ Before you begin, ensure you have the following tools installed on your system:
    Start by cloning the project repository to your local machine:
 
    ```bash
-   git clone https://github.com/Athitthan/CM-3070-final-project-web-app-souce-code.git
-   cd CM-3070-final-project-web-app-souce-code
+   git clone https://github.com/Athitthan/Shine-In-Darkness.git
+   cd Shine-In-Darkness
    ```
 
 
