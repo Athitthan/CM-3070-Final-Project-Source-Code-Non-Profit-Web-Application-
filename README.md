@@ -15,6 +15,7 @@ Before you begin, ensure you have the following tools installed on your system:
 
 ### Setting Up the Development Environment
 
+
 1. **Clone the repository**
 
    Start by cloning the project repository to your local machine:
@@ -29,7 +30,7 @@ Before you begin, ensure you have the following tools installed on your system:
 
 2.Create and activate a virtual environment:
 
-   ```CLI
+  ```bash
    virtualenv venv
    source venv/bin/activate  # On Unix or MacOS
    .\venv\Scripts\activate  # On Windows
@@ -42,20 +43,20 @@ After setting up your virtual environment using either option:
 
 3. Install project dependencies:
 
-   ```CLI
+   ```bash
    pip install -r requirements.txt
    ```
 
 
 4. Run database migrations:
 
-   ```CLI
+   ```bash
    python manage.py migrate
    ```
 
 5. Start the development server:
 
-   ```CLI
+   ```bash
    python manage.py runserver
    ```
 
